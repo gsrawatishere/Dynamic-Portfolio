@@ -14,9 +14,6 @@ import {
 
 const jwtSecret = process.env.JWT_SECRET || "your_jwt_secret_key";
 
-
-
-
 // Add Admin
 
 export const addAdmin = async (req, res) => {
@@ -24,9 +21,7 @@ export const addAdmin = async (req, res) => {
     const { email, password } = req.body;
 
     // Check existing admin
-    const existingAdmin = await Admin.findOne({
-      email,
-    });
+    const existingAdmin = await Admin.findOne({});
 
     if (existingAdmin) {
       return res.status(400).json({
@@ -35,8 +30,7 @@ export const addAdmin = async (req, res) => {
     }
 
     // Hash password
-    const hashedPassword =
-      await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create admin
     const admin = await Admin.create({
@@ -76,7 +70,11 @@ export const adminLogin = async (req, res) => {
     const token = jwt.sign({ userId: admin._id }, jwtSecret, {
       expiresIn: "15d",
     });
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
     res.json({ message: "Login successful" });
   } catch (error) {
     console.error("Login error:", error);
@@ -120,7 +118,11 @@ export const changePassword = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
 
     return res.status(200).json({
       message: "Logged out successfully",
