@@ -13,7 +13,7 @@ import {
 // Get Research Papers
 export const getAllResearchPapers = async (req, res) => {
   try {
-    const researchPapers = await ResearchPaper.find();
+    const researchPapers = await ResearchPaper.find().sort({ createdAt: -1 });
 
     return res
 

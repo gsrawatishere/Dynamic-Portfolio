@@ -16,7 +16,9 @@ import {
 
 export const getAllExperiences = async (req, res) => {
   try {
-    const experiences = await Experience.find();
+    const experiences = await Experience.find().sort({
+      createdAt: -1,
+    });
 
     return res.status(200).json(experiences);
   } catch (error) {

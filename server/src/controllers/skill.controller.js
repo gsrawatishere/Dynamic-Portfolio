@@ -31,12 +31,11 @@ export const getAllSkills = async (req, res) => {
 // Add Skill
 export const addSkill = async (req, res) => {
   try {
-    const { category, name, icon } = req.body;
+    const { category, name } = req.body;
 
     const skill = await Skill.create({
       category,
       name,
-      icon,
     });
 
     return res.status(201).json({

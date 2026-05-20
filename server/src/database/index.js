@@ -81,7 +81,6 @@ const skillSchema = new mongoose.Schema(
       required: true,
     },
 
-    icon: String,
   },
   {
     timestamps: true,

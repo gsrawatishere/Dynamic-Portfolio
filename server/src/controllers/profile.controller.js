@@ -10,6 +10,7 @@ import {
   ResearchPaper,
   Message,
 } from "../database/index.js";
+import cloudinary from "../config/cloudinary.js";
 
 // profile controller
 
@@ -51,6 +52,14 @@ export const editProfile = async (req, res) => {
     } = req.body;
 
     let profile = await Profile.findOne();
+    let imageUrl = "";
+
+    if(profilePicture){
+      const uploadedImage = await cloudinary.uploader.upload(profilePicture, {
+        folder: "profile_pictures",
+      });
+      imageUrl = uploadedImage.secure_url;
+    }
 
     // If profile doesn't exist, create one
     if (!profile) {
@@ -62,7 +71,7 @@ export const editProfile = async (req, res) => {
         resumeLink,
         githubLink,
         linkedinLink,
-        profilePicture,
+        profilePicture: imageUrl ,
       });
 
       return res.status(201).json({
@@ -79,8 +88,10 @@ export const editProfile = async (req, res) => {
     profile.resumeLink = resumeLink || profile.resumeLink;
     profile.githubLink = githubLink || profile.githubLink;
     profile.linkedinLink = linkedinLink || profile.linkedinLink;
-    profile.profilePicture = profilePicture || profile.profilePicture;
-
+    if(imageUrl) {
+      profile.profilePicture = imageUrl;
+    } 
+    
     await profile.save();
 
     return res.status(200).json({

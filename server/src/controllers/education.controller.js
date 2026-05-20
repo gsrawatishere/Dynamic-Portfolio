@@ -12,12 +12,13 @@ import {
 
 // Education controller
 
-
 // Get Education
 
 export const getAllEducation = async (req, res) => {
   try {
-    const education = await Education.find();
+    const education = await Education.find().sort({
+      createdAt: -1,
+    });
 
     return res.status(200).json(education);
   } catch (error) {

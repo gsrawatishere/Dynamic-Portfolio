@@ -16,7 +16,9 @@ import {
 
 export const getAllMessages = async (req, res) => {
   try {
-    const messages = await Message.find();
+    const messages = await Message.find().sort({
+      createdAt: -1,
+    });
 
     return res.status(200).json(messages);
   } catch (error) {

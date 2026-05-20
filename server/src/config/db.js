@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb://localhost:27017/dynamic-portfolio"
+      "mongodb+srv://ourcampuskart_db_user:PvTnx6DFGqSLyCY0@cluster0.8mresi6.mongodb.net/portfolio"
     );
 
     console.log("MongoDB Connected");

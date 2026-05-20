@@ -9,6 +9,7 @@ import {
   ResearchPaper,
   Message,
 } from "../database/index.js";
+import cloudinary from "../config/cloudinary.js";
 
 // Blog controller
 

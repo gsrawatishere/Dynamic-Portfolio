@@ -9,6 +9,7 @@ import {
   ResearchPaper,
   Message,
 } from "../database/index.js";
+import cloudinary from "../config/cloudinary.js";
 
 
 // Project controller
@@ -16,7 +17,9 @@ import {
 // Get Projects
 export const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find().sort({
+      createdAt: -1,
+    });
 
     return res.status(200).json(projects);
   } catch (error) {
@@ -33,13 +36,22 @@ export const addProject = async (req, res) => {
   try {
     const { title, summary, tech, liveLink, githubLink, image } = req.body;
 
+    let imageUrl = "";
+
+    if(image){
+      const uploadedImage = await cloudinary.uploader.upload(image, {
+        folder: "project_images",
+      });
+      imageUrl = uploadedImage.secure_url;
+    }
+
     const project = await Project.create({
       title,
       summary,
       tech,
       liveLink,
       githubLink,
-      image,
+      image: imageUrl,
     });
 
     return res.status(201).json({
